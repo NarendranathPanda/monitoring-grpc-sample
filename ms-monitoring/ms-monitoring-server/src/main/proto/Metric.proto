@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.naren.grpc.metric";
+option java_outer_classname = "MsMetric";
+option objc_class_prefix = "MON";
+
+package metric;
+
+
+service Metric {
+  rpc Metric (Request) returns (Response) {}
+}
+message Request {
+  string name = 1;
+}
+message Response {
+	repeated MetricFamily metricFamily = 1;
+}
+message MetricFamily {
+	MetaData metaData	=	1;
+	repeated Sample sample	=	2;
+}
+message MetaData {
+	string	nameSpace	= 	1;
+	string	subSystem	=	2;
+	string	name		= 	3;  
+	string	help		= 	4;
+	Type	type		=	5;
+	
+}
+message Sample {
+	repeated	string labelNames 	= 1;
+	repeated	string labelValues 	= 2;
+	double	value					= 3;
+	int64	timestamp_ms			= 4;
+}
+enum Type {
+  COUNTER    = 0;
+  GAUGE      = 1;
+  SUMMARY    = 2;
+  UNTYPED    = 3;
+  HISTOGRAM  = 4;
+}
+
+
+
+
+
+
+
+
+
+
+
