@@ -22,24 +22,6 @@ metricFamily {
     value: 1.0
     timestamp_ms: 1546918818551
   }
-  sample {
-    labelNames: "client"
-    labelValues: "Test Client -1546918887588"
-    value: 1.0
-    timestamp_ms: 1546918888666
-  }
-  sample {
-    labelNames: "client"
-    labelValues: "Test Client -1546918948537"
-    value: 1.0
-    timestamp_ms: 1546918949609
-  }
-  sample {
-    labelNames: "client"
-    labelValues: "Test Client -1546919021241"
-    value: 1.0
-    timestamp_ms: 1546919022276
-  }
 }</p>
 </td></tr>
   </table>
