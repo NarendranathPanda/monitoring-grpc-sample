@@ -1,12 +1,14 @@
 
-<table><tr><td><script>
-Prometheus Metric : 
+<table><tr><td>
+Prometheus Metric :
+  <p>
 # HELP naren_monitoring_request_counter Metrics from test ms request counter.
 # TYPE naren_monitoring_request_counter counter
 naren_monitoring_request_counter{client="Test Client -1546918817344",} 1.0 1546918818551
-</script></td></tr>
-  <tr><td><script>
-GRPC Server outputs : 
+</p></td></tr>
+  <tr><td>
+GRPC Server outputs :
+    <p>
 metricFamily {
   metaData {
     nameSpace: "naren"
@@ -38,6 +40,6 @@ metricFamily {
     value: 1.0
     timestamp_ms: 1546919022276
   }
-}</script>
+}</p>
 </td></tr>
   </table>
