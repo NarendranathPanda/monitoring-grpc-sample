@@ -6,11 +6,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-import com.naren.grpc.metric.MetricFamily;
-import com.naren.grpc.metric.MetricGrpc;
-import com.naren.grpc.metric.MetricRequest;
-import com.naren.grpc.metric.MetricResponse;
-import com.naren.grpc.metric.TestMetricFamily;
+import com.naren.grpc.metric.TestMetric;
+import com.naren.monitoring.LabelValuePair;
+import com.naren.monitoring.MetricFamily;
+import com.naren.monitoring.MetricRequest;
+import com.naren.monitoring.MetricResponse;
+import com.naren.monitoring.MetricServiceGrpc;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -27,7 +28,7 @@ public class SampleMonitoringServer {
 	private void start() throws IOException {
 		/* The port on which the server should run */
 		int port = 50051;
-		server = ServerBuilder.forPort(port).addService(new MetricImpl()).build().start();
+		server = ServerBuilder.forPort(port).addService(new MetricServiceImpl()).build().start();
 		logger.info("Server started, listening on " + port);
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
@@ -66,16 +67,17 @@ public class SampleMonitoringServer {
 		server.blockUntilShutdown();
 	}
 
-	static class MetricImpl extends MetricGrpc.MetricImplBase {
+	static class MetricServiceImpl extends MetricServiceGrpc.MetricServiceImplBase {
 
 		@Override
 		public void metric(MetricRequest request, StreamObserver<MetricResponse> responseObserver) {
 			MetricResponse reply = null;
 			try {
-				Collection<String> labelValues = new ArrayList<>();
-				labelValues.add(request.getName());
-				TestMetricFamily.addSample(labelValues, 1);
-				MetricFamily metricFamily = TestMetricFamily.getMetricFamily();
+				Collection<LabelValuePair> labelValues = new ArrayList<>();
+				labelValues.add(LabelValuePair.newBuilder().setLabelName(TestMetric.LABELS[0])
+						.setLabelValue(request.getName()).build());
+				TestMetric.addSample(labelValues, 1);
+				MetricFamily metricFamily = TestMetric.getMetricFamily();
 				Collection<MetricFamily> metrics = new ArrayList<>();
 				metrics.add(metricFamily);
 				reply = MetricResponse.newBuilder().addAllMetricFamily(metrics).build();

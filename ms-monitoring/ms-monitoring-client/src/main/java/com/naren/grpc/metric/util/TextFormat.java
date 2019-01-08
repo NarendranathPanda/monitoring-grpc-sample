@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
-import com.google.protobuf.ProtocolStringList;
-import com.naren.grpc.metric.MetaData;
-import com.naren.grpc.metric.MetricFamily;
-import com.naren.grpc.metric.MetricResponse;
-import com.naren.grpc.metric.Sample;
-import com.naren.grpc.metric.Type;
+import com.naren.monitoring.LabelValuePair;
+import com.naren.monitoring.MetaData;
+import com.naren.monitoring.MetricFamily;
+import com.naren.monitoring.MetricResponse;
+import com.naren.monitoring.MetricType;
+import com.naren.monitoring.Sample;
 
 public class TextFormat {
 	/**
@@ -47,14 +47,13 @@ public class TextFormat {
 
 	private static void writeSample(Writer writer, String name, Sample sample) throws IOException {
 		writer.write(name);
-		ProtocolStringList labelNamesList = sample.getLabelNamesList();
-		ProtocolStringList labelValuesList = sample.getLabelValuesList();
-		if (labelNamesList.size() > 0) {
+		List<LabelValuePair> labelValuePairList = sample.getLabelValuePairList();
+		if (labelValuePairList.size() > 0) {
 			writer.write('{');
-			for (int i = 0; i < labelNamesList.size(); ++i) {
-				writer.write(labelNamesList.get(i));
+			for (int i = 0; i < labelValuePairList.size(); ++i) {
+				writer.write(labelValuePairList.get(i).getLabelName());
 				writer.write("=\"");
-				writeEscapedLabelValue(writer, labelValuesList.get(i));
+				writeEscapedLabelValue(writer, labelValuePairList.get(i).getLabelValue());
 				writer.write("\",");
 			}
 			writer.write('}');
@@ -101,7 +100,7 @@ public class TextFormat {
 		}
 	}
 
-	private static String typeString(Type t) {
+	private static String typeString(MetricType t) {
 		switch (t) {
 		case GAUGE:
 			return "gauge";

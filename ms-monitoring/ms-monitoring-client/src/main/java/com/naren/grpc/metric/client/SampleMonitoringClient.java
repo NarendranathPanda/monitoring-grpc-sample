@@ -7,10 +7,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.naren.grpc.metric.MetricGrpc;
-import com.naren.grpc.metric.MetricRequest;
-import com.naren.grpc.metric.MetricResponse;
 import com.naren.grpc.metric.util.TextFormat;
+import com.naren.monitoring.MetricRequest;
+import com.naren.monitoring.MetricResponse;
+import com.naren.monitoring.MetricServiceGrpc;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -24,7 +24,7 @@ public class SampleMonitoringClient {
 	private static final Logger logger = Logger.getLogger(SampleMonitoringClient.class.getName());
 
 	private final ManagedChannel channel;
-	private final MetricGrpc.MetricBlockingStub blockingStub;
+	private final MetricServiceGrpc.MetricServiceBlockingStub blockingStub;
 
 	/** Construct client connecting to MetricWorld server at {@code host:port}. */
 	public SampleMonitoringClient(String host, int port) {
@@ -40,7 +40,7 @@ public class SampleMonitoringClient {
 	 */
 	SampleMonitoringClient(ManagedChannel channel) {
 		this.channel = channel;
-		blockingStub = MetricGrpc.newBlockingStub(channel);
+		blockingStub = MetricServiceGrpc.newBlockingStub(channel);
 	}
 
 	public void shutdown() throws InterruptedException {
@@ -65,7 +65,6 @@ public class SampleMonitoringClient {
 			e.printStackTrace();
 		}
 		logger.info("Prometheus Metric : \n" + writer.toString() + "\n");
-		logger.info("##################################################################################");
 		logger.info("\nGRPC Server outputs : \n" + collector.toString());
 	}
 
