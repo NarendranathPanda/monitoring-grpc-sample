@@ -8,8 +8,8 @@ import java.util.logging.Logger;
 
 import com.naren.grpc.metric.MetricFamily;
 import com.naren.grpc.metric.MetricGrpc;
-import com.naren.grpc.metric.Request;
-import com.naren.grpc.metric.Response;
+import com.naren.grpc.metric.MetricRequest;
+import com.naren.grpc.metric.MetricResponse;
 import com.naren.grpc.metric.TestMetricFamily;
 
 import io.grpc.Server;
@@ -69,8 +69,8 @@ public class SampleMonitoringServer {
 	static class MetricImpl extends MetricGrpc.MetricImplBase {
 
 		@Override
-		public void metric(Request request, StreamObserver<Response> responseObserver) {
-			Response reply = null;
+		public void metric(MetricRequest request, StreamObserver<MetricResponse> responseObserver) {
+			MetricResponse reply = null;
 			try {
 				Collection<String> labelValues = new ArrayList<>();
 				labelValues.add(request.getName());
@@ -78,7 +78,7 @@ public class SampleMonitoringServer {
 				MetricFamily metricFamily = TestMetricFamily.getMetricFamily();
 				Collection<MetricFamily> metrics = new ArrayList<>();
 				metrics.add(metricFamily);
-				reply = Response.newBuilder().addAllMetricFamily(metrics).build();
+				reply = MetricResponse.newBuilder().addAllMetricFamily(metrics).build();
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}

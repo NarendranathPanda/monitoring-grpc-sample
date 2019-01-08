@@ -9,12 +9,12 @@ package metric;
 
 
 service Metric {
-  rpc Metric (Request) returns (Response) {}
+  rpc Metric (MetricRequest) returns (MetricResponse) {}
 }
-message Request {
+message MetricRequest {
   string name = 1;
 }
-message Response {
+message MetricResponse {
 	repeated MetricFamily metricFamily = 1;
 }
 message MetricFamily {

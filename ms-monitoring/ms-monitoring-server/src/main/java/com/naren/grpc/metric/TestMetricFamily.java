@@ -10,10 +10,10 @@ public class TestMetricFamily {
 
 	private static final String NAMESPACE = "naren";
 	private static final String SUBSYSTEM = "monitoring";
-	private static final String NAME = "test_metric_gauge";
-	private static final String HELP = "Metrics from test ms.";
+	private static final String NAME = "request_counter";
+	private static final String HELP = "Metrics from test ms request counter.";
 	private static final MetaData METADATA = MetaData.newBuilder().setNameSpace(NAMESPACE).setSubSystem(SUBSYSTEM)
-			.setName(NAME).setHelp(HELP).setType(Type.GAUGE).build();
+			.setName(NAME).setHelp(HELP).setType(Type.COUNTER).build();
 
 	private static Collection<Sample> samples = new ArrayList<>();
 
@@ -25,7 +25,7 @@ public class TestMetricFamily {
 	}
 
 	static {
-		labelNames.add("seq");
+		labelNames.add("client");
 	}
 
 	public static void addSample(Collection<String> labelValues, double value) throws ParseException {

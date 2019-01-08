@@ -7,7 +7,7 @@ import java.util.List;
 import com.google.protobuf.ProtocolStringList;
 import com.naren.grpc.metric.MetaData;
 import com.naren.grpc.metric.MetricFamily;
-import com.naren.grpc.metric.Response;
+import com.naren.grpc.metric.MetricResponse;
 import com.naren.grpc.metric.Sample;
 import com.naren.grpc.metric.Type;
 
@@ -20,7 +20,7 @@ public class TextFormat {
 	/**
 	 * Write out the text version 0.0.4 of the given MetricFamilySamples.
 	 */
-	public static void write004(Writer writer, Response response) throws IOException {
+	public static void write004(Writer writer, MetricResponse response) throws IOException {
 		for (MetricFamily metric : response.getMetricFamilyList()) {
 			writer.write("# HELP ");
 			MetaData metaData = metric.getMetaData();

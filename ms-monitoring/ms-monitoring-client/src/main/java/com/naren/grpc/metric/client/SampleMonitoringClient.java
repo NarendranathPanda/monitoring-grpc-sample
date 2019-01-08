@@ -8,8 +8,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.naren.grpc.metric.MetricGrpc;
-import com.naren.grpc.metric.Request;
-import com.naren.grpc.metric.Response;
+import com.naren.grpc.metric.MetricRequest;
+import com.naren.grpc.metric.MetricResponse;
 import com.naren.grpc.metric.util.TextFormat;
 
 import io.grpc.ManagedChannel;
@@ -50,8 +50,8 @@ public class SampleMonitoringClient {
 	/** Say Metric to server. */
 	public void metric(String name) {
 		logger.info("Will try to greet " + name + " ...");
-		Request request = Request.newBuilder().setName(name).build();
-		Response collector;
+		MetricRequest request = MetricRequest.newBuilder().setName(name).build();
+		MetricResponse collector;
 		try {
 			collector = blockingStub.metric(request);
 		} catch (StatusRuntimeException e) {
@@ -64,8 +64,9 @@ public class SampleMonitoringClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		logger.info("Metric: \n" + writer.toString());
-		logger.info("Server: \n" + collector.toString());
+		logger.info("Prometheus Metric : \n" + writer.toString() + "\n");
+		logger.info("##################################################################################");
+		logger.info("\nGRPC Server outputs : \n" + collector.toString());
 	}
 
 	/**
