@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
-import com.naren.monitoring.LabelValuePair;
 import com.naren.monitoring.MetaData;
 import com.naren.monitoring.MetricFamily;
 import com.naren.monitoring.MetricResponse;
@@ -34,26 +33,31 @@ public class TextFormat {
 			writer.write(' ');
 			writer.write(typeString(metaData.getType()));
 			writer.write('\n');
-			writeSamples(writer, fullName, metric.getSampleList());
+			writeSamples(writer, fullName, metric.getSampleList(), metaData.getLabelNameList());
 		}
 
 	}
 
-	private static void writeSamples(Writer writer, String namesapce, List<Sample> samples) throws IOException {
+	private static void writeSamples(Writer writer, String namesapce, List<Sample> samples, List<String> labelNames)
+			throws IOException {
 		for (Sample sample : samples) {
-			writeSample(writer, namesapce, sample);
+			writeSample(writer, namesapce, sample, labelNames);
 		}
 	}
 
-	private static void writeSample(Writer writer, String name, Sample sample) throws IOException {
+	private static void writeSample(Writer writer, String name, Sample sample, List<String> labelNames)
+			throws IOException {
 		writer.write(name);
-		List<LabelValuePair> labelValuePairList = sample.getLabelValuePairList();
-		if (labelValuePairList.size() > 0) {
+		List<String> labelValueList = sample.getLabelValueList();
+		if (labelNames.size() > 0) {
+			if (labelValueList == null || labelNames.size() != labelValueList.size()) {
+				throw new InvalidLableValuePairException();
+			}
 			writer.write('{');
-			for (int i = 0; i < labelValuePairList.size(); ++i) {
-				writer.write(labelValuePairList.get(i).getLabelName());
+			for (int i = 0; i < labelNames.size(); ++i) {
+				writer.write(labelNames.get(i));
 				writer.write("=\"");
-				writeEscapedLabelValue(writer, labelValuePairList.get(i).getLabelValue());
+				writeEscapedLabelValue(writer, labelValueList.get(i));
 				writer.write("\",");
 			}
 			writer.write('}');

@@ -25,17 +25,15 @@ message MetaData {
 	string	name		= 	3;  
 	string	help		= 	4;
 	MetricType	type	=	5;
+	repeated string labelName 	= 6;
 	
 }
 message Sample {
-	repeated    LabelValuePair labelValuePair 	= 1;
+	repeated	string labelValue 	= 1;
 	double	value					= 2;
 	int64	timestamp_ms			= 3;
 }
-message LabelValuePair {
-	string labelName 	= 1;
-	string labelValue 	= 2;
-}
+
 enum MetricType {
   COUNTER    = 0;
   GAUGE      = 1;

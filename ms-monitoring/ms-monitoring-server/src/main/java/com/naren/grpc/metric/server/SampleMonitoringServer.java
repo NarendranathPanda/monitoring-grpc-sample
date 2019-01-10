@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import com.naren.grpc.metric.TestMetric;
-import com.naren.monitoring.LabelValuePair;
 import com.naren.monitoring.MetricFamily;
 import com.naren.monitoring.MetricRequest;
 import com.naren.monitoring.MetricResponse;
@@ -73,9 +72,9 @@ public class SampleMonitoringServer {
 		public void metric(MetricRequest request, StreamObserver<MetricResponse> responseObserver) {
 			MetricResponse reply = null;
 			try {
-				Collection<LabelValuePair> labelValues = new ArrayList<>();
-				labelValues.add(LabelValuePair.newBuilder().setLabelName(TestMetric.LABELS[0])
-						.setLabelValue(request.getName()).build());
+				Collection<String> labelValues = new ArrayList<>();
+				labelValues.add(request.getName());
+				labelValues.add("localhost");
 				TestMetric.addSample(labelValues, 1);
 				MetricFamily metricFamily = TestMetric.getMetricFamily();
 				Collection<MetricFamily> metrics = new ArrayList<>();
